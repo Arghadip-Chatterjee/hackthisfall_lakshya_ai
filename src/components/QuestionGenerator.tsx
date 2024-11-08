@@ -118,7 +118,7 @@ export default function QuestionGenerator() {
             if (response.ok && data.filePath) {
                 setAudioUrl(data.filePath);  // Set the audio URL returned from the API
                 setAudioKey((prev) => prev + 1);  // Force re-render of the audio player with a new key
-                startTimer(timerDuration)
+                // startTimer(timerDuration)
             } else {
                 console.error('Error generating speech:', data.error);
             }
@@ -193,6 +193,8 @@ export default function QuestionGenerator() {
                 }
 
                 // startTimer(timerDuration)
+                startTimer(timerDuration)
+
 
             } catch (err) {
                 console.error(err);
