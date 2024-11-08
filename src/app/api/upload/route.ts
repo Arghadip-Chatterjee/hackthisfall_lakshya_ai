@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const formData = await request.formData();
 
     // Forward the formData to the FastAPI backend
-    const response = await fetch('https://lakshya-ai-backend.onrender.com/upload', {
+    const response = await fetch('https://nithacks-backend.onrender.com/upload', {
       method: 'POST',
       body: formData,
     });

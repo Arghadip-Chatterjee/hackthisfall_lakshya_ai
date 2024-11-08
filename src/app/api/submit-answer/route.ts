@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Question and answer are required.' }, { status: 400 });
     }
 
-    const response = await fetch('https://lakshya-ai-backend.onrender.com/submit-answer', {
+    const response = await fetch('https://nithacks-backend.onrender.com/submit-answer', {
       method: 'POST',
       body: new URLSearchParams({ question, answer }),
       headers: {
