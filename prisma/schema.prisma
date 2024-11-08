@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URI") // Ensure you set this to your MongoDB connection string
+}
+
+
+// Github Table
+model Github {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   // User's ID
+  githubUrl  String   // User's GitHub URL
+  answers    Json     // Store an array of answer objects as JSON
+  createdAt  DateTime @default(now()) // Track when the interview was created
+}
+
+
+// Code Table
+model Code {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String @unique
+  topic      String  // Interview topic
+  experience String  // User's experience level
+  difficulty String  // Difficulty level
+  timer      Int     // Timer in seconds
+  questions  Json // Questions for the code interview
+}
+
+model Task {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  topic       String
+  description String   // Task description
+  createdAt   DateTime @default(now())
+}
+
+model Course {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId // Use auto-generated ObjectId
+  name  String
+  image String
+  units Unit[]
+}
+
+model Unit {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId// Use auto-generated ObjectId
+  courseId String @db.ObjectId// Store the reference ID as a string
+
+  name     String
+  course   Course? @relation(fields: [courseId], references: [id]) // Optional relation
+  chapters Chapter[]
+
+  @@index([courseId], name: "courseId")
+}
+
+model Chapter {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId // Use auto-generated ObjectId
+  unitId String @db.ObjectId// Store the reference ID as a string
+
+  name               String
+  youtubeSearchQuery String
+  videoId            String?
+  summary            String? 
+  unit               Unit? @relation(fields: [unitId], references: [id]) // Optional relation
+  questions          Question[]
+
+  @@index([unitId], name: "unitId")
+}
+
+model Question {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId// Use auto-generated ObjectId
+  chapterId String @db.ObjectId// Store the reference ID as a string
+
+  question String  
+  chapter  Chapter? @relation(fields: [chapterId], references: [id]) // Optional relation
+
+  @@index([chapterId], name: "chapterId")
+}
+
+model Feedback {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @unique // Reference to the userId
+  feedback  String
+  createdAt DateTime @default(now())
+}
